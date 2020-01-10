@@ -1,0 +1,7 @@
+{
+  "name": "Commandes",
+  "version": "1.0.0",
+  "icon": "shopping_basket",
+  "types": ["string"],
+  "options": {}
+}

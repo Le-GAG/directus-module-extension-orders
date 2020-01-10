@@ -1,0 +1,42 @@
+{
+  "name": "@le-gag/directus-module-orders",
+  "version": "1.0.0",
+  "description": "Directus business-logic module to display an overview of orders.",
+  "main": "",
+  "scripts": {
+    "build": "directus-extensions build",
+    "dev": "directus-extensions watch"
+  },
+  "keywords": [
+    "directus-page",
+    "page",
+    "extensions",
+    "directus"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Le-GAG/directus-page-extension-orders"
+  },
+  "bugs": {
+    "url": "https://github.com/Le-GAG/directus-page-extension-orders/issues"
+  },
+  "author": {
+    "name": "nstCactus",
+    "email": "nstCactus@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@directus/extension-toolkit": "^0.6.0",
+    "v-tooltip": "^2.0.2",
+    "vue": "^2.6.11",
+    "vue-good-table": "^2.18.1",
+    "vue-hot-reload-api": "^2.3.4",
+    "xlsx": "^0.15.4"
+  },
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^2.6.0",
+    "cssnano": "^4.1.10",
+    "sass": "^1.24.0",
+    "vue-template-compiler": "^2.6.10"
+  }
+}
