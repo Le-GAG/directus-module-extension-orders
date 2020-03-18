@@ -1,19 +1,10 @@
 # Le GAG - Directus orders extension
 
 [Directus](directus) business-logic module to display an overview of orders.  
-Highly coupled to [Le GAG](https://github.com/Le-GAG)'s website.
+Tightly coupled to [Le GAG](https://github.com/Le-GAG) website.
 
 
 ## Usage
-
-Because of a [bug in Parcel](parcel-bug), a nasty workaround is needed:
-
-````shell script
-npm install
-sed -i.bak '/publicUrl/ a\
-\ \ \ \ sourceMaps: false,
-' node_modules/@directus/extension-toolkit/cli/cmds/{build,watch}.js
-````
 
 ### Build for production
 
@@ -24,7 +15,7 @@ npm run build --input src
 ### Build for development
 
 ````shell script
-npm run dev --input src --output ../api/public/extensions/custom/modules/orders
+npm run dev --input src --output <DIRECTUS_API>/api/public/extensions/custom/modules/orders
 ````
 
 
