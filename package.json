@@ -31,12 +31,12 @@
     "vue": "^2.6.11",
     "vue-good-table": "^2.19.1",
     "vue-hot-reload-api": "^2.3.4",
-    "xlsx": "^0.15.5"
+    "xlsx": "^0.15.6"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.1.1",
     "cssnano": "^4.1.10",
-    "sass": "^1.26.2",
+    "sass": "^1.26.3",
     "vue-template-compiler": "^2.6.11"
   }
 }
