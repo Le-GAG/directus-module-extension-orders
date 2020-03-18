@@ -10,6 +10,8 @@
                         trigger: 'enter',
                         placeholder: 'Filtrer ce tableau',
                   }"
+                  theme="nocturnal"
+                  styleClass="vgt-table striped"
   >
     <div slot="emptystate">Il n'y a actuellement pas de commandes pour cette vente.</div>
 
@@ -155,6 +157,7 @@
 </script>
 
 <style lang="scss" scoped>
+
   .v-table {
     &__group-by {
       display: flex;
@@ -169,5 +172,13 @@
       display: flex;
       justify-content: space-between;
     }
+  }
+</style>
+
+<style lang="scss">
+  @import "../node_modules/vue-good-table/src/styles/style.scss";
+
+  .vgt-row-header {
+      background-color: $thead-bg-color-1 !important;
   }
 </style>
