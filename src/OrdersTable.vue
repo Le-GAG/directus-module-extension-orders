@@ -9,7 +9,7 @@
                         enabled: true,
                         trigger: 'enter',
                         placeholder: 'Filtrer ce tableau',
-                      }"
+                  }"
   >
     <div slot="emptystate">Il n'y a actuellement pas de commandes pour cette vente.</div>
 
@@ -21,7 +21,7 @@
           for="groupBy"
           @click.prevent="groupByProducer = false"
         >Adhérent</label>
-        <v-toggle id="groupBy" v-model="groupByProducer"/>
+        <v-switch id="groupBy" v-model="groupByProducer"></v-switch>
         <label
           class="v-table__group-by-label"
           for="groupBy"
@@ -38,7 +38,7 @@
     </template>
 
     <div slot="table-actions-bottom">
-      This will show up on the bottom of the table.
+
     </div>
   </vue-good-table>
 </template>
@@ -47,13 +47,12 @@
 <script>
   import 'vue-good-table/dist/vue-good-table.css';
   import { VueGoodTable } from 'vue-good-table';
-  import VToggle          from '../../app/src/components/form-inputs/toggle';
   import XLSX             from 'xlsx';
 
   export default {
-    name: 'VTable',
+    name: 'OrdersTable',
 
-    components: { VueGoodTable, VToggle },
+    components: { VueGoodTable },
 
     props: {
       rows: { required: true },

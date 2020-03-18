@@ -1,49 +1,38 @@
 <template>
   <div class="orders-page">
-    <v-header title="Vue d'ensemble des commandes"
-              icon="shopping_basket"
-    />
+    <v-header title="Commandes"
+              :breadcrumb="breadcrumb"
+    ></v-header>
 
-    <div class="orders-page__layout" v-if="saleOptions">
-      <label class="orders-page__label" for="selected-sale">Vente</label>
-      <v-select class="orders-page__sale-dropdown"
-                id="selected-sale"
-                :options="saleOptions"
-                placeholder="Choisir une vente"
-                v-model="currentSaleIndex"
-      />
+    <label class="type-label orders-page__label" for="selected-sale">Vente</label>
 
-      <v-table :rows="orders" />
+    <v-select class="orders-page__sale-dropdown"
+              id="selected-sale"
+              :options="saleOptions"
+              placeholder="Choisir une vente"
+              v-model="currentSaleIndex"
+              v-if="saleOptions"
+    ></v-select>
 
-      <p>Possibilité de saisir la quantité et le montant (certains produits seulement)</p>
-      <p>Il faut donc une table de liaison commandes_producteurs_adherents</p>
+    <div class="orders-page__loading-indicator">
+      <v-spinner v-if="isLoading"></v-spinner>
     </div>
+
+    <orders-table :rows="orders"></orders-table>
+
+    <br><br><br>
+    <p>Possibilité de saisir la quantité et le montant (certains produits seulement)</p>
+    <p>Il faut donc une table de liaison commandes_producteurs_adherents</p>
   </div>
 </template>
 
 <script>
-  import VTooltip      from 'v-tooltip';
-  import Vue           from 'vue';
-  import VHeader       from '../../app/src/components/header/header';
-  import VSelect       from '../../app/src/components/form-inputs/select';
-  import VHeaderButton from '../../app/src/components/header/header-button';
-  import VIcon         from '../../app/src/components/icon';
-  import VSpinner      from '../../app/node_modules/vue-simple-spinner';
-  import VTable        from './VTable';
-
-  Vue.component('v-icon', VIcon);
-  Vue.component('v-spinner', VSpinner);
-
-  Vue.use(VTooltip, {
-    defaultDelay: { show: 500 },
-    defaultOffset: 2,
-    autoHide: false,
-  });
+  import OrdersTable from './OrdersTable';
 
   export default {
     name: 'LeGagOrdersModule',
 
-    components: { VHeader, VHeaderButton, VSelect, VTable },
+    components: { OrdersTable },
 
     filters: {
       date(value) {
@@ -61,6 +50,7 @@
 
     data () {
       return {
+        isLoading:         false,
         currentSaleIndex:  null,
         sales:             null,
         orders:            [],
@@ -69,6 +59,14 @@
     },
 
     computed: {
+      breadcrumb () {
+        return [
+          {
+            name: 'Modules',
+            path: `/${this.$store.state.currentProjectKey}/ext/modules`
+          }
+        ];
+      },
       currentSale () {
         if (!this.currentSaleIndex) {
           return null;
@@ -104,19 +102,26 @@
       },
     },
 
+    async mounted () {
+      const ventes = await this.$api.getItems('ventes');
+      this.sales = ventes.data;
+    },
+
     methods: {
       async fetchOrders() {
         if (!this.currentSaleIndex) {
           return [];
         }
 
+        this.isLoading = true;
+
         const response = await this.$api.getItems('commandes', {
           fields:  [
-            'produits.prix',
-            'produits.quantite',
-            'produits.produits_variantes_id.conditionnement.nom',
-            'produits.produits_variantes_id.contenance',
-            'produits.produits_variantes_id.produit.*.*',
+            'produits_variantes.prix',
+            'produits_variantes.quantite',
+            'produits_variantes.produits_variantes_id.conditionnement.nom',
+            'produits_variantes.produits_variantes_id.contenance',
+            'produits_variantes.produits_variantes_id.produit.*.*',
             'created_by.first_name',
             'created_by.last_name',
             'created_by.email',
@@ -145,87 +150,34 @@
         });
 
         this.orders = formattedOrders;
+        this.isLoading = false;
       },
-    },
-
-    async mounted () {
-      const ventes = await this.$api.getItems('ventes');
-      this.sales = ventes.data;
     },
   };
 </script>
 
 <style scoped lang="scss">
-  .material-icons {
-    font-family: Material Icons;
-    font-weight: 400;
-    font-style: normal;
-    display: inline-block;
-    line-height: 1;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    -webkit-font-feature-settings: "liga";
-    font-feature-settings: "liga";
-    vertical-align: middle;
-  }
-
   .orders-page {
-    &__header {
-      display: flex;
-      align-items: center;
-
-      position: fixed;
-      top: 0;
-      left: var(--nav-sidebar-width);
-      right: 0;
-
-      height: var(--header-height);
-      padding: 0 var(--page-padding);
-
-      background-color: var(--body-background);
-    }
-
-    &__header-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      width: 40px;
-      height: 40px;
-
-      margin-right: 16px;
-
-      border-radius: 100%;
-      background-color: var(--lightest-gray);
-      cursor: initial;
-
-      >>> i {
-        font-size: 24px;
-        color: var(--gray);
-      }
-    }
-
-    &__title {
-      color: var(--darker-gray);
-      font-size: 22px;
-    }
+    padding: var(--page-padding);
 
     &__label {
       font-family: var(--family-sans-serif);
-      font-size: var(--size-2);
+      font-size: var(--type-label-size);
       font-weight: var(--weight-normal);
-      color: var(--darkest-gray);
-      padding: 10px;
-    }
+      color: var(--heading-text-color);
 
-    &__layout {
-      padding: var(--page-padding);
+      margin-top: var(--form-vertical-gap);
+      margin-bottom: var(--input-label-margin);
     }
 
     &__sale-dropdown {
-      margin-bottom: var(--page-padding);
+    }
+
+    &__loading-indicator {
+      display: flex;
+      justify-content: center;
+
+      padding: var(--input-padding);
     }
   }
 </style>
